@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>校园二手交易平台 - 项目总结报告</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #1e293b;
+      --muted: #64748b;
+      --accent: #2563eb;
+      --border: #e2e8f0;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+    }
+    .layout {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 32px 24px 64px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 40px 48px;
+      box-shadow: 0 4px 24px rgba(15, 23, 42, 0.06);
+    }
+    h1 { font-size: 2rem; border-bottom: 2px solid var(--accent); padding-bottom: 12px; }
+    h2 { font-size: 1.4rem; margin-top: 2.2em; color: #0f172a; border-left: 4px solid var(--accent); padding-left: 12px; }
+    h3 { font-size: 1.1rem; margin-top: 1.6em; }
+    blockquote {
+      margin: 1em 0;
+      padding: 12px 16px;
+      background: #eff6ff;
+      border-left: 4px solid var(--accent);
+      color: #1e40af;
+    }
+    table { width: 100%; border-collapse: collapse; margin: 1em 0; font-size: 0.95rem; }
+    th, td { border: 1px solid var(--border); padding: 10px 12px; text-align: left; }
+    th { background: #f1f5f9; font-weight: 600; }
+    tr:nth-child(even) { background: #f8fafc; }
+    code { background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
+    pre {
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 16px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 0.88rem;
+    }
+    pre code { background: none; color: inherit; padding: 0; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    hr { border: none; border-top: 1px solid var(--border); margin: 2em 0; }
+    .table-of-contents {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 24px;
+      margin-bottom: 24px;
+    }
+    .table-of-contents ul { padding-left: 1.2em; }
+    .mermaid { text-align: center; margin: 1.5em 0; }
+    .footer { text-align: center; color: var(--muted); font-size: 0.85rem; margin-top: 32px; }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <div class="card">
+      <h1 id="%E6%A0%A1%E5%9B%AD%E4%BA%8C%E6%89%8B%E4%BA%A4%E6%98%93%E5%B9%B3%E5%8F%B0-%E2%80%94-%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93%E6%8A%A5%E5%91%8A" tabindex="-1"><a class="header-anchor" href="#%E6%A0%A1%E5%9B%AD%E4%BA%8C%E6%89%8B%E4%BA%A4%E6%98%93%E5%B9%B3%E5%8F%B0-%E2%80%94-%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93%E6%8A%A5%E5%91%8A">校园二手交易平台 — 项目总结报告</a></h1>
+<blockquote>
+<p><strong>项目名称</strong>：Campus Second-hand Trading Platform（91026 校园二手交易平台）<br>
+<strong>文档版本</strong>：v1.0<br>
+<strong>更新日期</strong>：2026-05-30<br>
+<strong>项目类型</strong>：前后端分离 Web 应用（用户端 + 管理端 + REST API）</p>
+</blockquote>
+<hr>
+<h2 id="%E4%B8%80%E3%80%81%E9%A1%B9%E7%9B%AE%E6%A6%82%E8%BF%B0" tabindex="-1"><a class="header-anchor" href="#%E4%B8%80%E3%80%81%E9%A1%B9%E7%9B%AE%E6%A6%82%E8%BF%B0">一、项目概述</a></h2>
+<h3 id="1.1-%E9%A1%B9%E7%9B%AE%E8%83%8C%E6%99%AF" tabindex="-1"><a class="header-anchor" href="#1.1-%E9%A1%B9%E7%9B%AE%E8%83%8C%E6%99%AF">1.1 项目背景</a></h3>
+<p>随着高校学生群体消费观念转变，闲置物品流转需求日益增长。本项目面向校园场景，构建一个<strong>安全、便捷、可信任</strong>的二手交易与资源共享平台，覆盖商品买卖、求购匹配、免费赠送、信用评价、资讯公告等核心业务，并提供完善的后台管理能力。</p>
+<h3 id="1.2-%E5%BB%BA%E8%AE%BE%E7%9B%AE%E6%A0%87" tabindex="-1"><a class="header-anchor" href="#1.2-%E5%BB%BA%E8%AE%BE%E7%9B%AE%E6%A0%87">1.2 建设目标</a></h3>
+<table>
+<thead>
+<tr>
+<th>目标维度</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>业务目标</td>
+<td>实现校园内 C2C 二手交易闭环，降低闲置浪费</td>
+</tr>
+<tr>
+<td>技术目标</td>
+<td>采用主流前后端分离架构，便于扩展与维护</td>
+</tr>
+<tr>
+<td>安全目标</td>
+<td>JWT 鉴权 + Spring Security，保障用户与交易安全</td>
+</tr>
+<tr>
+<td>体验目标</td>
+<td>用户端简洁易用，管理端数据可视化、运营高效</td>
+</tr>
+</tbody>
+</table>
+<h3 id="1.3-%E9%A1%B9%E7%9B%AE%E6%88%90%E6%9E%9C%E6%A6%82%E8%A7%88" tabindex="-1"><a class="header-anchor" href="#1.3-%E9%A1%B9%E7%9B%AE%E6%88%90%E6%9E%9C%E6%A6%82%E8%A7%88">1.3 项目成果概览</a></h3>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>数量</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>源代码文件</td>
+<td>171+</td>
+</tr>
+<tr>
+<td>后端 Java 类</td>
+<td>107</td>
+</tr>
+<tr>
+<td>用户端页面</td>
+<td>22</td>
+</tr>
+<tr>
+<td>管理端页面</td>
+<td>18</td>
+</tr>
+<tr>
+<td>数据库表</td>
+<td>18</td>
+</tr>
+<tr>
+<td>REST 控制器</td>
+<td>26</td>
+</tr>
+<tr>
+<td>代码贡献（团队）</td>
+<td>3000 行（hangu 1500 / kelei 1500）</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="%E4%BA%8C%E3%80%81%E6%8A%80%E6%9C%AF%E6%9E%B6%E6%9E%84" tabindex="-1"><a class="header-anchor" href="#%E4%BA%8C%E3%80%81%E6%8A%80%E6%9C%AF%E6%9E%B6%E6%9E%84">二、技术架构</a></h2>
+<h3 id="2.1-%E6%80%BB%E4%BD%93%E6%9E%B6%E6%9E%84" tabindex="-1"><a class="header-anchor" href="#2.1-%E6%80%BB%E4%BD%93%E6%9E%B6%E6%9E%84">2.1 总体架构</a></h3>
+<pre><code class="language-mermaid">flowchart TB
+    subgraph Client[&quot;客户端&quot;]
+        FE[&quot;用户端 Vue 3&lt;br/&gt;:3000&quot;]
+        AD[&quot;管理端 Vue 3&lt;br/&gt;:3001&quot;]
+    end
+
+    subgraph Server[&quot;服务端&quot;]
+        API[&quot;Spring Boot 2.7&lt;br/&gt;:8080/api&quot;]
+        SEC[&quot;Spring Security + JWT&quot;]
+        SVC[&quot;Service 业务层&quot;]
+        MP[&quot;MyBatis-Plus&quot;]
+    end
+
+    subgraph Data[&quot;数据层&quot;]
+        DB[(MySQL campus_trade)]
+        IMG[&quot;本地图片存储&quot;]
+    end
+
+    FE --&gt;|HTTP /api| API
+    AD --&gt;|HTTP /api| API
+    API --&gt; SEC --&gt; SVC --&gt; MP --&gt; DB
+    API --&gt; IMG
+</code></pre>
+<h3 id="2.2-%E6%8A%80%E6%9C%AF%E6%A0%88" tabindex="-1"><a class="header-anchor" href="#2.2-%E6%8A%80%E6%9C%AF%E6%A0%88">2.2 技术栈</a></h3>
+<h4 id="%E5%90%8E%E7%AB%AF" tabindex="-1"><a class="header-anchor" href="#%E5%90%8E%E7%AB%AF">后端</a></h4>
+<table>
+<thead>
+<tr>
+<th>技术</th>
+<th>版本</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Java</td>
+<td>17</td>
+<td>运行环境</td>
+</tr>
+<tr>
+<td>Spring Boot</td>
+<td>2.7.14</td>
+<td>Web 框架</td>
+</tr>
+<tr>
+<td>Spring Security</td>
+<td>2.7.x</td>
+<td>认证授权</td>
+</tr>
+<tr>
+<td>MyBatis-Plus</td>
+<td>3.5.3.1</td>
+<td>ORM / 数据访问</td>
+</tr>
+<tr>
+<td>MySQL</td>
+<td>8.0+</td>
+<td>关系型数据库</td>
+</tr>
+<tr>
+<td>JWT (jjwt)</td>
+<td>0.9.1</td>
+<td>Token 鉴权</td>
+</tr>
+<tr>
+<td>Lombok</td>
+<td>1.18.30</td>
+<td>简化实体代码</td>
+</tr>
+<tr>
+<td>Maven</td>
+<td>3.6+</td>
+<td>构建工具</td>
+</tr>
+</tbody>
+</table>
+<h4 id="%E5%89%8D%E7%AB%AF%EF%BC%88%E7%94%A8%E6%88%B7%E7%AB%AF-%26-%E7%AE%A1%E7%90%86%E7%AB%AF%EF%BC%89" tabindex="-1"><a class="header-anchor" href="#%E5%89%8D%E7%AB%AF%EF%BC%88%E7%94%A8%E6%88%B7%E7%AB%AF-%26-%E7%AE%A1%E7%90%86%E7%AB%AF%EF%BC%89">前端（用户端 &amp; 管理端）</a></h4>
+<table>
+<thead>
+<tr>
+<th>技术</th>
+<th>版本</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Vue</td>
+<td>3.3.4</td>
+<td>前端框架</td>
+</tr>
+<tr>
+<td>Vite</td>
+<td>4.4.9</td>
+<td>构建与开发服务器</td>
+</tr>
+<tr>
+<td>Vue Router</td>
+<td>4.2.4</td>
+<td>路由管理</td>
+</tr>
+<tr>
+<td>Pinia</td>
+<td>2.1.6</td>
+<td>状态管理</td>
+</tr>
+<tr>
+<td>Element Plus</td>
+<td>2.3.14</td>
+<td>UI 组件库</td>
+</tr>
+<tr>
+<td>Axios</td>
+<td>1.5.0</td>
+<td>HTTP 请求</td>
+</tr>
+<tr>
+<td>ECharts</td>
+<td>5.4.3</td>
+<td>管理端数据图表（admin）</td>
+</tr>
+<tr>
+<td>Sass</td>
+<td>1.69.5</td>
+<td>样式预处理（admin）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2.3-%E9%A1%B9%E7%9B%AE%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84" tabindex="-1"><a class="header-anchor" href="#2.3-%E9%A1%B9%E7%9B%AE%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84">2.3 项目目录结构</a></h3>
+<pre><code>91026校园二手交易平台/
+├── backend/                    # 后端 Spring Boot 项目
+│   ├── src/main/java/com/campus/trade/
+│   │   ├── CampusTradeApplication.java
+│   │   ├── config/             # 配置（CORS、Security、MyBatis）
+│   │   ├── controller/         # REST 控制器（26 个）
+│   │   ├── service/            # 业务接口与实现
+│   │   ├── mapper/             # MyBatis-Plus Mapper
+│   │   ├── entity/             # 实体类（18 个）
+│   │   ├── security/           # JWT 过滤器与工具
+│   │   └── common/             # 统一响应 Result
+│   └── src/main/resources/
+│       ├── application.yml     # 应用配置
+│       ├── sql/campus_trade.sql# 数据库初始化脚本
+│       └── image/              # 图片上传目录
+├── UI/
+│   ├── frontend/               # 用户端（端口 3000）
+│   │   └── src/
+│   │       ├── views/          # 页面组件
+│   │       ├── api/            # API 封装
+│   │       ├── router/         # 路由
+│   │       ├── stores/         # Pinia 状态
+│   │       └── utils/request.js
+│   └── admin/                  # 管理端（端口 3001）
+│       └── src/views/          # 后台管理页面
+├── docs/                       # 项目文档
+│   └── 项目总结报告.md
+├── tools/                      # 工具脚本
+└── .vscode/                    # 编辑器工作区配置
+</code></pre>
+<hr>
+<h2 id="%E4%B8%89%E3%80%81%E5%8A%9F%E8%83%BD%E6%A8%A1%E5%9D%97" tabindex="-1"><a class="header-anchor" href="#%E4%B8%89%E3%80%81%E5%8A%9F%E8%83%BD%E6%A8%A1%E5%9D%97">三、功能模块</a></h2>
+<h3 id="3.1-%E7%94%A8%E6%88%B7%E7%AB%AF%E5%8A%9F%E8%83%BD" tabindex="-1"><a class="header-anchor" href="#3.1-%E7%94%A8%E6%88%B7%E7%AB%AF%E5%8A%9F%E8%83%BD">3.1 用户端功能</a></h3>
+<table>
+<thead>
+<tr>
+<th>模块</th>
+<th>路由</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>首页</td>
+<td><code>/</code></td>
+<td>轮播图、公告、热门商品、分类入口</td>
+</tr>
+<tr>
+<td>商品浏览</td>
+<td><code>/products</code></td>
+<td>分类筛选、关键词搜索、排序、分页</td>
+</tr>
+<tr>
+<td>商品详情</td>
+<td><code>/product/:id</code></td>
+<td>详情展示、评论、下单、收藏</td>
+</tr>
+<tr>
+<td>发布商品</td>
+<td><code>/publish</code></td>
+<td>商品发布与编辑（需登录）</td>
+</tr>
+<tr>
+<td>求购广场</td>
+<td><code>/wants</code></td>
+<td>浏览求购信息、发布求购</td>
+</tr>
+<tr>
+<td>免费赠送</td>
+<td><code>/free</code></td>
+<td>免费物品列表与详情</td>
+</tr>
+<tr>
+<td>发布赠送</td>
+<td><code>/publish-free</code></td>
+<td>发布免费物品</td>
+</tr>
+<tr>
+<td>校园资讯</td>
+<td><code>/news</code></td>
+<td>资讯列表与详情</td>
+</tr>
+<tr>
+<td>信用中心</td>
+<td><code>/credit</code></td>
+<td>信用积分、记录查询</td>
+</tr>
+<tr>
+<td>个人中心</td>
+<td><code>/profile</code></td>
+<td>资料管理、我的商品/订单/求购</td>
+</tr>
+<tr>
+<td>我的订单</td>
+<td><code>/orders</code></td>
+<td>订单状态跟踪</td>
+</tr>
+<tr>
+<td>登录注册</td>
+<td><code>/login</code> <code>/register</code></td>
+<td>用户认证</td>
+</tr>
+<tr>
+<td>帮助/关于</td>
+<td><code>/help</code> <code>/about</code></td>
+<td>平台说明</td>
+</tr>
+</tbody>
+</table>
+<h3 id="3.2-%E7%AE%A1%E7%90%86%E7%AB%AF%E5%8A%9F%E8%83%BD" tabindex="-1"><a class="header-anchor" href="#3.2-%E7%AE%A1%E7%90%86%E7%AB%AF%E5%8A%9F%E8%83%BD">3.2 管理端功能</a></h3>
+<table>
+<thead>
+<tr>
+<th>模块</th>
+<th>路由</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>数据仪表盘</td>
+<td><code>/dashboard</code></td>
+<td>核心指标概览</td>
+</tr>
+<tr>
+<td>数据图表</td>
+<td><code>/data-charts</code></td>
+<td>ECharts 可视化统计</td>
+</tr>
+<tr>
+<td>用户管理</td>
+<td><code>/users</code></td>
+<td>用户列表、禁用/启用</td>
+</tr>
+<tr>
+<td>分类管理</td>
+<td><code>/categories</code></td>
+<td>商品分类 CRUD</td>
+</tr>
+<tr>
+<td>商品管理</td>
+<td><code>/products</code></td>
+<td>商品审核、上下架</td>
+</tr>
+<tr>
+<td>订单管理</td>
+<td><code>/orders</code></td>
+<td>订单处理、状态变更</td>
+</tr>
+<tr>
+<td>评论管理</td>
+<td><code>/comments</code></td>
+<td>评论审核与删除</td>
+</tr>
+<tr>
+<td>求购管理</td>
+<td><code>/wants</code></td>
+<td>求购信息维护</td>
+</tr>
+<tr>
+<td>求购报价</td>
+<td><code>/want-offers</code></td>
+<td>报价记录管理</td>
+</tr>
+<tr>
+<td>免费物品</td>
+<td><code>/free</code></td>
+<td>赠送信息审核</td>
+</tr>
+<tr>
+<td>资讯管理</td>
+<td><code>/news</code></td>
+<td>资讯发布与编辑</td>
+</tr>
+<tr>
+<td>资讯分类</td>
+<td><code>/news-categories</code></td>
+<td>资讯栏目管理</td>
+</tr>
+<tr>
+<td>信用管理</td>
+<td><code>/credits</code></td>
+<td>信用分调整、记录</td>
+</tr>
+<tr>
+<td>举报管理</td>
+<td><code>/reports</code></td>
+<td>用户举报处理</td>
+</tr>
+<tr>
+<td>轮播图</td>
+<td><code>/banners</code></td>
+<td>首页轮播配置</td>
+</tr>
+<tr>
+<td>公告管理</td>
+<td><code>/announcements</code></td>
+<td>平台公告发布</td>
+</tr>
+<tr>
+<td>客服咨询</td>
+<td><code>/customer-service</code></td>
+<td>用户咨询回复</td>
+</tr>
+<tr>
+<td>操作日志</td>
+<td><code>/logs</code></td>
+<td>管理员操作审计</td>
+</tr>
+</tbody>
+</table>
+<h3 id="3.3-%E5%90%8E%E7%AB%AF-api-%E6%A8%A1%E5%9D%97" tabindex="-1"><a class="header-anchor" href="#3.3-%E5%90%8E%E7%AB%AF-api-%E6%A8%A1%E5%9D%97">3.3 后端 API 模块</a></h3>
+<table>
+<thead>
+<tr>
+<th>模块路径</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/auth</code></td>
+<td>注册、登录、用户信息</td>
+</tr>
+<tr>
+<td><code>/users</code></td>
+<td>用户资料管理</td>
+</tr>
+<tr>
+<td><code>/products</code></td>
+<td>商品 CRUD、搜索</td>
+</tr>
+<tr>
+<td><code>/categories</code></td>
+<td>分类查询</td>
+</tr>
+<tr>
+<td><code>/orders</code></td>
+<td>订单创建与状态流转</td>
+</tr>
+<tr>
+<td><code>/comments</code></td>
+<td>商品评论</td>
+</tr>
+<tr>
+<td><code>/wants</code> <code>/want-offers</code></td>
+<td>求购与报价</td>
+</tr>
+<tr>
+<td><code>/free</code></td>
+<td>免费赠送</td>
+</tr>
+<tr>
+<td><code>/news</code> <code>/news-categories</code></td>
+<td>资讯</td>
+</tr>
+<tr>
+<td><code>/credit</code></td>
+<td>信用积分</td>
+</tr>
+<tr>
+<td><code>/banners</code> <code>/announcements</code></td>
+<td>轮播与公告</td>
+</tr>
+<tr>
+<td><code>/notifications</code></td>
+<td>消息通知</td>
+</tr>
+<tr>
+<td><code>/customer-service</code></td>
+<td>在线客服</td>
+</tr>
+<tr>
+<td><code>/reports</code></td>
+<td>举报</td>
+</tr>
+<tr>
+<td><code>/statistics</code></td>
+<td>统计数据</td>
+</tr>
+<tr>
+<td><code>/files</code></td>
+<td>文件上传</td>
+</tr>
+<tr>
+<td><code>/admin/*</code></td>
+<td>管理端专用接口</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="%E5%9B%9B%E3%80%81%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1" tabindex="-1"><a class="header-anchor" href="#%E5%9B%9B%E3%80%81%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1">四、数据库设计</a></h2>
+<p>数据库名：<code>campus_trade</code>，字符集 <code>utf8mb4</code>，共 <strong>18 张表</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>表名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>user</code></td>
+<td>用户（角色：USER / SELLER / ADMIN）</td>
+</tr>
+<tr>
+<td><code>category</code></td>
+<td>商品分类</td>
+</tr>
+<tr>
+<td><code>product</code></td>
+<td>商品信息</td>
+</tr>
+<tr>
+<td><code>order</code></td>
+<td>交易订单</td>
+</tr>
+<tr>
+<td><code>comment</code></td>
+<td>商品评论</td>
+</tr>
+<tr>
+<td><code>want</code></td>
+<td>求购信息</td>
+</tr>
+<tr>
+<td><code>want_offer</code></td>
+<td>求购报价</td>
+</tr>
+<tr>
+<td><code>free</code></td>
+<td>免费赠送</td>
+</tr>
+<tr>
+<td><code>news</code></td>
+<td>校园资讯</td>
+</tr>
+<tr>
+<td><code>news_category</code></td>
+<td>资讯分类</td>
+</tr>
+<tr>
+<td><code>banner</code></td>
+<td>首页轮播图</td>
+</tr>
+<tr>
+<td><code>announcement</code></td>
+<td>平台公告</td>
+</tr>
+<tr>
+<td><code>notification</code></td>
+<td>用户通知</td>
+</tr>
+<tr>
+<td><code>user_credit</code></td>
+<td>用户信用分</td>
+</tr>
+<tr>
+<td><code>credit_record</code></td>
+<td>信用变动记录</td>
+</tr>
+<tr>
+<td><code>report</code></td>
+<td>举报记录</td>
+</tr>
+<tr>
+<td><code>customer_service</code></td>
+<td>客服咨询</td>
+</tr>
+<tr>
+<td><code>operation_log</code></td>
+<td>管理员操作日志</td>
+</tr>
+</tbody>
+</table>
+<h3 id="%E6%A0%B8%E5%BF%83%E5%AE%9E%E4%BD%93%E5%85%B3%E7%B3%BB%EF%BC%88%E7%AE%80%E5%8C%96%EF%BC%89" tabindex="-1"><a class="header-anchor" href="#%E6%A0%B8%E5%BF%83%E5%AE%9E%E4%BD%93%E5%85%B3%E7%B3%BB%EF%BC%88%E7%AE%80%E5%8C%96%EF%BC%89">核心实体关系（简化）</a></h3>
+<pre><code class="language-mermaid">erDiagram
+    USER ||--o{ PRODUCT : publishes
+    USER ||--o{ ORDER : buys
+    USER ||--o{ ORDER : sells
+    PRODUCT ||--o{ COMMENT : has
+    PRODUCT }o--|| CATEGORY : belongs_to
+    USER ||--|| USER_CREDIT : has
+    USER ||--o{ CREDIT_RECORD : generates
+    WANT ||--o{ WANT_OFFER : receives
+    USER ||--o{ WANT : posts
+</code></pre>
+<hr>
+<h2 id="%E4%BA%94%E3%80%81%E5%AE%89%E5%85%A8%E4%B8%8E%E9%89%B4%E6%9D%83" tabindex="-1"><a class="header-anchor" href="#%E4%BA%94%E3%80%81%E5%AE%89%E5%85%A8%E4%B8%8E%E9%89%B4%E6%9D%83">五、安全与鉴权</a></h2>
+<h3 id="5.1-%E8%AE%A4%E8%AF%81%E6%B5%81%E7%A8%8B" tabindex="-1"><a class="header-anchor" href="#5.1-%E8%AE%A4%E8%AF%81%E6%B5%81%E7%A8%8B">5.1 认证流程</a></h3>
+<ol>
+<li>用户通过 <code>/api/auth/login</code> 提交账号密码</li>
+<li>Spring Security 校验通过后生成 JWT Token（有效期 24 小时）</li>
+<li>前端将 Token 存入 Pinia，后续请求携带 <code>Authorization: Bearer &lt;token&gt;</code></li>
+<li><code>JwtAuthenticationFilter</code> 拦截并解析 Token，注入安全上下文</li>
+</ol>
+<h3 id="5.2-%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6" tabindex="-1"><a class="header-anchor" href="#5.2-%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6">5.2 权限控制</a></h3>
+<ul>
+<li><strong>普通用户（USER）</strong>：浏览、发布、交易、评论</li>
+<li><strong>卖家（SELLER）</strong>：同用户，可管理自己的商品</li>
+<li><strong>管理员（ADMIN）</strong>：访问管理端，执行审核与运营操作</li>
+<li>管理端路由通过 <code>meta.requiresAuth</code> 守卫，后端敏感接口使用 <code>@PreAuthorize</code></li>
+</ul>
+<h3 id="5.3-%E5%85%B6%E4%BB%96%E5%AE%89%E5%85%A8%E6%8E%AA%E6%96%BD" tabindex="-1"><a class="header-anchor" href="#5.3-%E5%85%B6%E4%BB%96%E5%AE%89%E5%85%A8%E6%8E%AA%E6%96%BD">5.3 其他安全措施</a></h3>
+<ul>
+<li>密码 BCrypt 加密存储</li>
+<li>文件上传大小限制（10MB）</li>
+<li>逻辑删除（MyBatis-Plus <code>deleted</code> 字段）</li>
+<li>操作日志记录管理员行为</li>
+</ul>
+<hr>
+<h2 id="%E5%85%AD%E3%80%81%E9%83%A8%E7%BD%B2%E4%B8%8E%E8%BF%90%E8%A1%8C" tabindex="-1"><a class="header-anchor" href="#%E5%85%AD%E3%80%81%E9%83%A8%E7%BD%B2%E4%B8%8E%E8%BF%90%E8%A1%8C">六、部署与运行</a></h2>
+<h3 id="6.1-%E7%8E%AF%E5%A2%83%E8%A6%81%E6%B1%82" tabindex="-1"><a class="header-anchor" href="#6.1-%E7%8E%AF%E5%A2%83%E8%A6%81%E6%B1%82">6.1 环境要求</a></h3>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>版本要求</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>JDK</td>
+<td>17+</td>
+</tr>
+<tr>
+<td>Maven</td>
+<td>3.6+</td>
+</tr>
+<tr>
+<td>MySQL</td>
+<td>8.0+</td>
+</tr>
+<tr>
+<td>Node.js</td>
+<td>16+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="6.2-%E5%BF%AB%E9%80%9F%E5%90%AF%E5%8A%A8" tabindex="-1"><a class="header-anchor" href="#6.2-%E5%BF%AB%E9%80%9F%E5%90%AF%E5%8A%A8">6.2 快速启动</a></h3>
+<pre><code class="language-bash"># 1. 初始化数据库
+mysql -u root -p campus_trade &lt; backend/src/main/resources/sql/campus_trade.sql
+
+# 2. 启动后端（backend 目录）
+mvn spring-boot:run
+
+# 3. 启动用户端（UI/frontend 目录）
+npm install &amp;&amp; npm run dev
+
+# 4. 启动管理端（UI/admin 目录）
+npm install &amp;&amp; npm run dev
+</code></pre>
+<h3 id="6.3-%E8%AE%BF%E9%97%AE%E5%9C%B0%E5%9D%80" tabindex="-1"><a class="header-anchor" href="#6.3-%E8%AE%BF%E9%97%AE%E5%9C%B0%E5%9D%80">6.3 访问地址</a></h3>
+<table>
+<thead>
+<tr>
+<th>服务</th>
+<th>地址</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>后端 API</td>
+<td><a href="http://localhost:8080/api">http://localhost:8080/api</a></td>
+</tr>
+<tr>
+<td>用户端</td>
+<td><a href="http://localhost:3000">http://localhost:3000</a></td>
+</tr>
+<tr>
+<td>管理端</td>
+<td><a href="http://localhost:3001">http://localhost:3001</a></td>
+</tr>
+</tbody>
+</table>
+<h3 id="6.4-%E6%B5%8B%E8%AF%95%E8%B4%A6%E5%8F%B7" tabindex="-1"><a class="header-anchor" href="#6.4-%E6%B5%8B%E8%AF%95%E8%B4%A6%E5%8F%B7">6.4 测试账号</a></h3>
+<table>
+<thead>
+<tr>
+<th>角色</th>
+<th>用户名</th>
+<th>密码</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>管理员</td>
+<td>admin</td>
+<td>123456</td>
+</tr>
+<tr>
+<td>普通用户</td>
+<td>user1</td>
+<td>123456</td>
+</tr>
+<tr>
+<td>卖家</td>
+<td>seller1</td>
+<td>123456</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="%E4%B8%83%E3%80%81%E5%9B%A2%E9%98%9F%E5%88%86%E5%B7%A5%E4%B8%8E%E4%BB%A3%E7%A0%81%E8%B4%A1%E7%8C%AE" tabindex="-1"><a class="header-anchor" href="#%E4%B8%83%E3%80%81%E5%9B%A2%E9%98%9F%E5%88%86%E5%B7%A5%E4%B8%8E%E4%BB%A3%E7%A0%81%E8%B4%A1%E7%8C%AE">七、团队分工与代码贡献</a></h2>
+<p>项目代码按函数粒度统计，团队总贡献 <strong>3000 行</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>成员</th>
+<th>贡献行数</th>
+<th>占比</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>hangu</td>
+<td>1500 行</td>
+<td>50%</td>
+</tr>
+<tr>
+<td>kelei</td>
+<td>1500 行</td>
+<td>50%</td>
+</tr>
+</tbody>
+</table>
+<p>各源文件顶部均标注了文件级贡献统计，Vue/JS 文件在函数上方标注 <code>@contributor</code> 注释，便于追溯模块负责人。</p>
+<hr>
+<h2 id="%E5%85%AB%E3%80%81%E9%A1%B9%E7%9B%AE%E4%BA%AE%E7%82%B9" tabindex="-1"><a class="header-anchor" href="#%E5%85%AB%E3%80%81%E9%A1%B9%E7%9B%AE%E4%BA%AE%E7%82%B9">八、项目亮点</a></h2>
+<ol>
+<li><strong>功能完整</strong>：覆盖交易、求购、赠送、信用、资讯、客服等校园二手场景</li>
+<li><strong>双端分离</strong>：用户端与管理端独立部署，职责清晰</li>
+<li><strong>信用体系</strong>：积分任务、每日登录奖励、管理员调分，提升交易信任度</li>
+<li><strong>数据可视化</strong>：管理端 ECharts 图表，支持运营决策</li>
+<li><strong>可扩展架构</strong>：标准 Controller → Service → Mapper 分层，MyBatis-Plus 简化 CRUD</li>
+<li><strong>开发友好</strong>：Vite 热更新、Spring DevTools、统一 Result 响应格式</li>
+</ol>
+<hr>
+<h2 id="%E4%B9%9D%E3%80%81%E5%AD%98%E5%9C%A8%E9%97%AE%E9%A2%98%E4%B8%8E%E6%94%B9%E8%BF%9B%E6%96%B9%E5%90%91" tabindex="-1"><a class="header-anchor" href="#%E4%B9%9D%E3%80%81%E5%AD%98%E5%9C%A8%E9%97%AE%E9%A2%98%E4%B8%8E%E6%94%B9%E8%BF%9B%E6%96%B9%E5%90%91">九、存在问题与改进方向</a></h2>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>现状</th>
+<th>改进建议</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>支付</td>
+<td>线下交易为主</td>
+<td>接入校园一卡通或第三方支付</td>
+</tr>
+<tr>
+<td>消息</td>
+<td>站内通知</td>
+<td>增加 WebSocket 实时推送</td>
+</tr>
+<tr>
+<td>搜索</td>
+<td>关键词 + 分类</td>
+<td>引入 Elasticsearch 全文检索</td>
+</tr>
+<tr>
+<td>部署</td>
+<td>本地开发配置</td>
+<td>Docker Compose 一键部署</td>
+</tr>
+<tr>
+<td>测试</td>
+<td>缺少自动化测试</td>
+<td>补充单元测试与接口测试</td>
+</tr>
+<tr>
+<td>移动端</td>
+<td>仅 Web 响应式</td>
+<td>开发小程序版本</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="%E5%8D%81%E3%80%81%E6%80%BB%E7%BB%93" tabindex="-1"><a class="header-anchor" href="#%E5%8D%81%E3%80%81%E6%80%BB%E7%BB%93">十、总结</a></h2>
+<p>本项目成功实现了一个功能较为完整的<strong>校园二手交易平台</strong>，采用 Spring Boot + Vue 3 前后端分离架构，具备商品交易、求购匹配、免费赠送、信用评价、内容运营和后台管理等核心能力。系统结构清晰、模块划分合理，适合作为开源与群智课程的综合实践项目，也具备进一步产品化扩展的基础。</p>
+<hr>
+<p><em>报告生成于 campus-second-hand-trade 项目仓库 · docs/项目总结报告.md</em></p>
+
+    </div>
+    <p class="footer">由 Markdown 自动生成 · docs/scripts/build-html.js</p>
+  </div>
+  <script>
+    mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
+    document.querySelectorAll('pre code.language-mermaid').forEach(function(el) {
+      var div = document.createElement('div');
+      div.className = 'mermaid';
+      div.textContent = el.textContent;
+      el.closest('pre').replaceWith(div);
+    });
+    document.querySelectorAll('code.language-mermaid').forEach(function(el) {
+      if (!el.closest('pre')) {
+        var div = document.createElement('div');
+        div.className = 'mermaid';
+        div.textContent = el.textContent;
+        el.replaceWith(div);
+      }
+    });
+  </script>
+</body>
+</html>
